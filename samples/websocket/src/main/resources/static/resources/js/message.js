@@ -25,14 +25,14 @@ function ApplicationModel(stompClient) {
               self.friendSignin({"username": friends[i]});
           }
       });
-      stompClient.subscribe("/topic/friends/signin", function(message) {
+      stompClient.subscribe("/topic/friends.signin", function(message) {
           var friends = JSON.parse(message.body);
 
           for(var i=0;i<friends.length;i++) {
               self.friendSignin(new ImFriend({"username": friends[i]}));
           }
       });
-      stompClient.subscribe("/topic/friends/signout", function(message) {
+      stompClient.subscribe("/topic/friends.signout", function(message) {
           var friends = JSON.parse(message.body);
 
           for(var i=0;i<friends.length;i++) {

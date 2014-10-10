@@ -42,6 +42,7 @@ dependencies {
             "redis.embedded:embedded-redis:0.2",
             "nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect",
             "com.h2database:h2",
+            "org.projectreactor:reactor-net",
             "org.springframework.security:spring-security-web:$springSecurityVersion",
             "org.springframework.security:spring-security-config:$springSecurityVersion",
             "org.springframework.security:spring-security-messaging:$springSecurityVersion",

@@ -58,7 +58,6 @@ public class MessageController {
     public void im(InstantMessage im, @CurrentUser User currentUser) {
         im.setFrom(currentUser.getEmail());
         messagingTemplate.convertAndSendToUser(im.getTo(),"/queue/messages",im);
-        System.out.println(SecurityContextHolder.getContext().getAuthentication());
         messagingTemplate.convertAndSendToUser(im.getFrom(),"/queue/messages",im);
     }
 

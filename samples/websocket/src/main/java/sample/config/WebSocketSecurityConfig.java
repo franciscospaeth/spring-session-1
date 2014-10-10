@@ -17,9 +17,9 @@ package sample.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.SimpMessageType;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.security.config.annotation.web.messaging.MessageSecurityMetadataSourceRegistry;
-import org.springframework.security.config.annotation.web.socket.AbstractSecurityWebSocketMessageBrokerConfigurer;
 import org.springframework.security.messaging.access.intercept.ChannelSecurityInterceptor;
 
 /**
@@ -35,19 +35,19 @@ public class WebSocketSecurityConfig extends AbstractSecurityWebSocketMessageBro
             .antMatchers(SimpMessageType.SUBSCRIBE, "/queue/**/*-user*","/topic/**/*-user*").denyAll()
             .anyMessage().hasRole("USER");
     }
-//
-//    @Override
-//    protected void configureOutbound(MessageSecurityMetadataSourceRegistry messages) {
-//        messages
-//            .anyMessage().hasRole("USER");
-//    }
+
+    @Override
+    protected void configureOutbound(MessageSecurityMetadataSourceRegistry messages) {
+        messages
+            .antMatchers(SimpMessageType.MESSAGE,"/**").hasRole("USER");
+    }
 
 
-//
-//    @Override
-//    public void configureMessageBroker(MessageBrokerRegistry registry) {
-//        registry.configureBrokerChannel().setInterceptors(securityContextChannelInterceptor(),outboundChannelSecurity());
-//    }
+
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry registry) {
+        registry.configureBrokerChannel().setInterceptors(messageUserToSecurityContextChannelInterceptor(),securityContextToMessageUserChannelInterceptor());
+    }
 
 
 }

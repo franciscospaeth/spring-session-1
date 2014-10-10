@@ -11,14 +11,16 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.session.ExpiringSession;
 import org.springframework.session.SessionRepository;
 import org.springframework.session.web.socket.server.SessionRepositoryMessageInterceptor;
-import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+import org.springframework.web.socket.messaging.SessionConnectEvent;
+import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import sample.data.ActiveWebSocketUserRepository;
+import sample.security.SecurityContextSubProtocolEventHandler;
 import sample.websocket.WebSocketConnectHandler;
 import sample.websocket.WebSocketDisconnectHandler;
 
@@ -31,8 +33,9 @@ public class WebSocketConfig<S extends ExpiringSession> extends AbstractWebSocke
     SessionRepository<S> sessionRepository;
 
     @Bean
-    public WebSocketConnectHandler<S> webSocketConnectHandler(SimpMessageSendingOperations messagingTemplate, ActiveWebSocketUserRepository repository) {
-        return new WebSocketConnectHandler<S>(messagingTemplate, repository);
+    public SecurityContextSubProtocolEventHandler<SessionConnectEvent> webSocketConnectHandler(SimpMessageSendingOperations messagingTemplate, ActiveWebSocketUserRepository repository) {
+        WebSocketConnectHandler<S> delegate = new WebSocketConnectHandler<S>(messagingTemplate, repository);
+        return new SecurityContextSubProtocolEventHandler<SessionConnectEvent>(delegate);
     }
 
     @Override
@@ -49,7 +52,8 @@ public class WebSocketConfig<S extends ExpiringSession> extends AbstractWebSocke
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/queue/", "/topic/");
+//        registry.enableSimpleBroker("/queue/", "/topic/");
+        registry.enableStompBrokerRelay("/queue/","/topic/");
         registry.setApplicationDestinationPrefixes("/app");
     }
 
@@ -59,8 +63,9 @@ public class WebSocketConfig<S extends ExpiringSession> extends AbstractWebSocke
     }
 
     @Bean
-    public WebSocketDisconnectHandler<S> webSocketDisconnectHandler(SimpMessageSendingOperations messagingTemplate, ActiveWebSocketUserRepository repository) {
-        return new WebSocketDisconnectHandler<S>(messagingTemplate, repository);
+    public SecurityContextSubProtocolEventHandler<SessionDisconnectEvent> webSocketDisconnectHandler(SimpMessageSendingOperations messagingTemplate, ActiveWebSocketUserRepository repository) {
+        WebSocketDisconnectHandler<S> delegate = new WebSocketDisconnectHandler<S>(messagingTemplate, repository);
+        return new SecurityContextSubProtocolEventHandler<SessionDisconnectEvent>(delegate);
     }
 
     @Override

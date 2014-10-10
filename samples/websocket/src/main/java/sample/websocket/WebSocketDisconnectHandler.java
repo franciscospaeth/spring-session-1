@@ -46,7 +46,7 @@ public class WebSocketDisconnectHandler<S> implements ApplicationListener<Sessio
         }
 
         repository.delete(id);
-        messagingTemplate.convertAndSend("/topic/friends/signout", Arrays.asList(user.getUsername()));
+//        messagingTemplate.convertAndSend("/topic/friends.signout", Arrays.asList(user.getUsername()));
 
     }
 }

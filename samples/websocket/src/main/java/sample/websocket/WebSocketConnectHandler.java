@@ -47,6 +47,6 @@ public class WebSocketConnectHandler<S> implements ApplicationListener<SessionCo
         }
         String id = SimpMessageHeaderAccessor.getSessionId(headers);
         repository.save(new ActiveWebSocketUser(id, user.getName(), Calendar.getInstance()));
-        messagingTemplate.convertAndSend("/topic/friends/signin", Arrays.asList(user.getName()));
+        messagingTemplate.convertAndSend("/topic/friends.signin", Arrays.asList(user.getName()));
     }
 }
