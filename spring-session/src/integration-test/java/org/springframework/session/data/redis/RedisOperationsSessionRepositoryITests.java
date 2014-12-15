@@ -9,7 +9,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
@@ -24,6 +30,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import redis.clients.jedis.Protocol;
 import redis.embedded.RedisServer;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -33,17 +40,6 @@ public class RedisOperationsSessionRepositoryITests<S extends Session> {
 
     @Autowired
     private SessionRepository<S> repository;
-
-    @Before
-    public void setup() throws IOException {
-        redisServer = new RedisServer(getPort());
-        redisServer.start();
-    }
-
-    @After
-    public void shutdown() throws InterruptedException {
-        redisServer.stop();
-    }
 
     @Test
     public void saves() {
@@ -95,6 +91,41 @@ public class RedisOperationsSessionRepositoryITests<S extends Session> {
             factory.setPort(getPort());
             factory.setUsePool(false);
             return factory;
+        }
+
+        @Bean
+        public static RedisServerBean redisServer() {
+            return new RedisServerBean();
+        }
+
+        /**
+         * Implements BeanDefinitionRegistryPostProcessor to ensure this Bean
+         * is initialized before any other Beans. Specifically, we want to ensure
+         * that the Redis Server is started before RedisHttpSessionConfiguration
+         * attempts to enable Keyspace notifications.
+         */
+        static class RedisServerBean implements InitializingBean, DisposableBean, BeanDefinitionRegistryPostProcessor {
+            private RedisServer redisServer;
+
+
+            @Override
+            public void afterPropertiesSet() throws Exception {
+                redisServer = new RedisServer(getPort());
+                redisServer.start();
+            }
+
+            @Override
+            public void destroy() throws Exception {
+                if(redisServer != null) {
+                    redisServer.stop();
+                }
+            }
+
+            @Override
+            public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {}
+
+            @Override
+            public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {}
         }
     }
 

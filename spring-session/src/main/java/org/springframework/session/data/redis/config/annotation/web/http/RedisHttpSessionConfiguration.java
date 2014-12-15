@@ -15,9 +15,11 @@
  */
 package org.springframework.session.data.redis.config.annotation.web.http;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.BeanClassLoaderAware;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
@@ -27,6 +29,7 @@ import org.springframework.context.annotation.ImportAware;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.PatternTopic;
@@ -135,6 +138,46 @@ public class RedisHttpSessionConfiguration implements ImportAware, BeanClassLoad
     @Autowired(required = false)
     public void setHttpSessionStrategy(HttpSessionStrategy httpSessionStrategy) {
         this.httpSessionStrategy = httpSessionStrategy;
+    }
+
+    @Bean
+    public EnableRedisKeyspaceNotificationsInitializer enableRedisKeyspaceNotificationsInitializer(RedisConnectionFactory connectionFactory) {
+        return new EnableRedisKeyspaceNotificationsInitializer(connectionFactory);
+    }
+
+    /**
+     * Ensures that Redis is configured to send keyspace notifications. This is important to ensure that expiration and
+     * deletion of sessions trigger SessionDestroyedEvents. Without the SessionDestroyedEvent resources may not get
+     * cleaned up properly. For example, the mapping of the Session to WebSocket connections may not get cleaned up.
+     */
+    static class EnableRedisKeyspaceNotificationsInitializer implements InitializingBean {
+        static final String CONFIG_NOTIFY_KEYSPACE_EVENTS = "notify-keyspace-events";
+        static final String CONFIG_NOTIFY_KEYSPACE_EVENTS_KEYSPACE = "K";
+
+        private final RedisConnectionFactory connectionFactory;
+
+        EnableRedisKeyspaceNotificationsInitializer(RedisConnectionFactory connectionFactory) {
+            this.connectionFactory = connectionFactory;
+        }
+
+
+        @Override
+        public void afterPropertiesSet() throws Exception {
+            RedisConnection connection = connectionFactory.getConnection();
+            String notifyOptions = getNotifyOptions(connection);
+            if(notifyOptions.contains(CONFIG_NOTIFY_KEYSPACE_EVENTS_KEYSPACE)) {
+                return;
+            }
+            connection.setConfig(CONFIG_NOTIFY_KEYSPACE_EVENTS, notifyOptions + CONFIG_NOTIFY_KEYSPACE_EVENTS_KEYSPACE);
+        }
+
+        private String getNotifyOptions(RedisConnection connection) {
+            List<String> config = connection.getConfig(CONFIG_NOTIFY_KEYSPACE_EVENTS);
+            if(config.size() < 2) {
+                return "";
+            }
+            return config.get(1);
+        }
     }
 
 
