@@ -1,0 +1,27 @@
+apply plugin: 'org.asciidoctor.convert'
+
+asciidoctorj {
+
+}
+
+asciidoctor {
+    def ghTag = snapshotBuild ? 'master' : project.version
+    def ghUrl = "https://github.com/spring-projects/spring-session/tree/$ghTag/"
+    attributes	'version-snapshot': snapshotBuild,
+            'version-milestone': milestoneBuild,
+            'version-release': releaseBuild,
+            'gh-url': ghUrl,
+            'gh-samples-url': "$ghUrl/samples/",
+            'download-url' : "https://github.com/spring-projects/spring-session/archive/${ghTag}.zip",
+            'spring-session-version' : version,
+            'spring-version' : springVersion,
+            'samples-dir' : rootProject.projectDir.path + '/samples/',
+
+            'source-highlighter' : 'coderay',
+            'imagesdir':'./images',
+            'icons': 'font',
+            'setanchors':'true',
+            'idprefix':'',
+            'idseparator':'-',
+            'docinfo1':'true'
+}

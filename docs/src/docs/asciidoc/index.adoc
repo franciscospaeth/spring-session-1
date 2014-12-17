@@ -1,0 +1,100 @@
+= Spring Session
+Rob Winch
+:version:
+:doctype: book
+
+[[abstract]]
+
+Spring Session provides an API and implementations for managing a user's session information.
+It also provides transparent integration with:
+
+* HttpSession - allows for simple clustered sessions,
+obtaining the session from custom parts of the HTTP request (i.e. HTTP headers),
+and managing multiple user's sessions in a single browser instance (i.e. multiple authenticated accounts similar to Google).
+
+* WebSocket - provides the ability to keep the HttpSession alive when receiving WebSocket messages
+
+= Sample Applications
+
+If you are looking to get started with Spring Session, the best place to start is our Sample Applications.
+
+.Sample Applications
+|===
+| Source | Description | Guide
+
+| {gh-samples-url}httpsession[HttpSession]
+| Demonstrates how to use Spring Session to replace the `HttpSession` with a Redis store.
+| link:guides/httpsession.html[HttpSession Guide]
+
+| {gh-samples-url}security[Spring Security]
+| Demonstrates how to use Spring Session with an existing Spring Security application.
+| link:guides/security.html[Spring Security Guide]
+
+|===
+
+== Spring Security
+== Multi User
+== WebSocket
+
+= HttpSession Integration
+
+= How HttpSession Works
+
+= How Multi User Works
+
+= SessionRepository
+
+== Usage
+=== Session
+=== ExpiringSession
+
+== RedisOperationsSessionRepository
+
+=== Viewing the Session in Redis
+
+After http://redis.io/topics/quickstart[installing redis-cli], you can inspect the values in Redis http://redis.io/commands#hash[using the redis-cli].
+For example, enter the following into a terminal:
+
+[source,bash]
+----
+$ redis-cli
+redis 127.0.0.1:6379> keys *
+1) "spring:session:sessions:4fc39ce3-63b3-4e17-b1c4-5e1ed96fb021" <1>
+2) "spring:session:expirations:1418772300000"
+----
+
+<1> This is the session identifier of the Spring Session.
+
+[source,bash]
+----
+redis 127.0.0.1:6379> hkeys spring:session:sessions:4fc39ce3-63b3-4e17-b1c4-5e1ed96fb021
+1) "lastAccessedTime"
+2) "creationTime"
+3) "maxInactiveInterval"
+4) "sessionAttr:username"
+redis 127.0.0.1:6379> hget spring:session:sessions:4fc39ce3-63b3-4e17-b1c4-5e1ed96fb021 sessionAttr:username
+"\xac\xed\x00\x05t\x00\x03rob"
+----
+
+We can add an attribute to our session using the redis-cli. For example, enter the following:
+
+[source,bash]
+----
+redis 127.0.0.1:6379> hmset spring:session:sessions:4fc39ce3-63b3-4e17-b1c4-5e1ed96fb021 sessionAttr:firstName "\xac\xed\x00\x05t\x00\x03Rob"
+OK
+----
+
+If you view the web application now, you will see an attribute with the name **firstName** and the value **Rob** was added.
+
+== MapSessionRepository
+== Writing Your Own SessionRepository
+
+= WebSocket Integration
+= Why?
+= How WebSocket Works
+
+= Support
+
+= Contributing
+
+= License
