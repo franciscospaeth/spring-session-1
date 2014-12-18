@@ -51,7 +51,7 @@ public class UserAccountsFilter implements Filter {
 
         String currentSessionAlias = sessionManager.getCurrentSessionAlias(httpRequest);
         Map<String, String> sessionIds = sessionManager.getSessionIds(httpRequest);
-        String newSessionAlias = Long.toHexString(System.currentTimeMillis());
+        String unauthenticatedAlias = null;
 
         String contextPath = httpRequest.getContextPath();
         List<Account> accounts = new ArrayList<Account>();
@@ -67,7 +67,7 @@ public class UserAccountsFilter implements Filter {
 
             String username = session.getAttribute("username");
             if(username == null) {
-                newSessionAlias = alias;
+                unauthenticatedAlias = alias;
                 continue;
             }
 
@@ -82,7 +82,10 @@ public class UserAccountsFilter implements Filter {
         }
 
         // tag::addAccountUrl[]
-        String addAccountUrl = sessionManager.encodeURL(contextPath, newSessionAlias);
+        String addAlias = unauthenticatedAlias == null ? // <1>
+                sessionManager.getNewSessionAlias(httpRequest) : // <2>
+                unauthenticatedAlias; // <3>
+        String addAccountUrl = sessionManager.encodeURL(contextPath, addAlias); // <4>
         // end::addAccountUrl[]
 
         httpRequest.setAttribute("currentAccount", currentAccount);

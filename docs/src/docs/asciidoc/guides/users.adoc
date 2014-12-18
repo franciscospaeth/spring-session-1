@@ -76,7 +76,7 @@ For example, the SESSION cookie might have a value of:
 We can add another session by requesting a URL that contains a special parameter in it.
 By default the parameter name is *_s*. For example, the following URL would create a new session:
 
-http://localhost:8080/?_s=new
+http://localhost:8080/?_s=1
 
 NOTE: The parameter value does not indicate the actual session id.
 This is important because we never want to allow the session id to be determined by a client to avoid https://www.owasp.org/index.php/Session_fixation[session fixation attacks].
@@ -99,3 +99,27 @@ We can now use it to create a URL to add another session.
 ----
 include::{samples-dir}users/src/main/java/sample/UserAccountsFilter.java[tags=addAccountUrl]
 ----
+
+<1> We have an existing variable named `unauthenticatedAlias`.
+The value is an alias that points to existing unauthenticated session.
+If no such session exists, the value is null.
+This ensures if we have an existing unauthenticated session that we use it instead of creating a new session.
+<2> If all of our sessions are already associated to a user, we create a new session alias.
+<3> If a there exists a session that is not associated to a user, we use its session alias.
+<4> Finally, we create the add account URL.
+The URL contains a session alias that either points to an existing unauthenticated session or is an alias that is unused thus signaling to create a new session associated to that alias.
+
+Now our SESSION cookie looks something like this:
+
+    0 7e8383a4-082c-4ffe-a4bc-c40fd3363c5e 1 1d526d4a-c462-45a4-93d9-84a39b6d44ad
+
+Such that:
+
+* The session id *7e8383a4-082c-4ffe-a4bc-c40fd3363c5e* has an alias of *0*.
+For example, if the URL is http://localhost:8080/?_s=0 this alias would be used.
+This is the default session.
+This means that if no session alias is specified, then this session is used.
+For example, if the URL is http://localhost:8080/ this alias would be used.
+* The session id *1d526d4a-c462-45a4-93d9-84a39b6d44ad* has an alias of *1*.
+If the session alias is *1*, then this session is used.
+For example, if the URL is http://localhost:8080/?_s=1 this alias would be used.
