@@ -25,8 +25,8 @@ You should now be able to access the application at http://localhost:8080/
 
 Try using the application. Authenticate with the following information:
 
-* **Username** *rob*
-* **Password** *rob*
+* **Username** _rob_
+* **Password** _rob_
 
 Now click the **Login** button. You should now be authenticated as the user **rob**.
 
@@ -37,13 +37,14 @@ We can click on links and our user information is preserved.
 
 Let's add an another account.
 
-* Click on the arrow next to **rob** in the upper right hand corner
+* Return to the *Home* page
+* Click on the arrow next to *rob* in the upper right hand corner
 * Click **Add Account**
 
 The log in form is displayed again. Authenticate with the following information:
 
-* **Username** *luke*
-* **Password** *luke*
+* **Username** _luke_
+* **Password** _luke_
 
 Now click the **Login** button. You should now be authenticated as the user **luke**.
 
@@ -54,12 +55,16 @@ We can click on links and our user information is preserved.
 
 Where did our original user go? Let's switch to our original account.
 
-* Click on the arrow next to **luke** in the upper right hand corner.
-* Click on **Switch Account** -> **Rob**
+* Click on the arrow next to *luke* in the upper right hand corner.
+* Click on **Switch Account** -> *rob*
 
-We are now using Rob's account.
+We are now using the session associated with *rob*.
 
 === How does it work?
+
+Let's take a look at how Spring Session keeps track of multiple sessions.
+
+== Managing a Single Session
 
 Spring Session keeps track of the `HttpSession` by adding a value to a cookie named SESSION.
 For example, the SESSION cookie might have a value of:
@@ -69,7 +74,7 @@ For example, the SESSION cookie might have a value of:
 == Adding a Session
 
 We can add another session by requesting a URL that contains a special parameter in it.
-By default the parameter name is **_s**. For example, the following URL would create a new session:
+By default the parameter name is *_s*. For example, the following URL would create a new session:
 
 http://localhost:8080/?_s=new
 
