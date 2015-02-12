@@ -31,7 +31,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.session.Session;
 import org.springframework.session.SessionRepository;
 import org.springframework.session.web.http.HttpSessionManager;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserAccountsFilter implements Filter {
 
     public void init(FilterConfig filterConfig) throws ServletException {

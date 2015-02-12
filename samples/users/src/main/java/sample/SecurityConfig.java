@@ -1,4 +1,3 @@
-package sample;
 /*
  * Copyright 2002-2014 the original author or authors.
  *
@@ -14,23 +13,22 @@ package sample;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+package sample;
 
-
-import javax.servlet.ServletContext;
-
-import org.springframework.session.web.context.AbstractHttpSessionApplicationInitializer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 /**
  * @author Rob Winch
  */
-public class Initializer extends AbstractHttpSessionApplicationInitializer {
+@EnableWebSecurity
+public class SecurityConfig {
 
-    public Initializer() {
-        super(Config.class);
-    }
-
-    @Override
-    protected void afterSessionRepositoryFilter(ServletContext servletContext) {
-        appendFilters(servletContext, new UserAccountsFilter());
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+            .inMemoryAuthentication()
+                .withUser("user").password("password").roles("USER");
     }
 }

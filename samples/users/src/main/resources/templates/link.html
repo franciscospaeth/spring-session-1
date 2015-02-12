@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Demonstrates Multi User Log In</title>
-    <link rel="stylesheet" href="assets/bootstrap.min.css">
+    <title>Linked Page</title>
+    <link rel="stylesheet" href="../resources/static/js/bootstrap.min.css">
     <style type="text/css">
         body {
             padding: 1em;
@@ -21,15 +21,10 @@
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
               <c:url value="/" var="homeUrl"/>
-              <li class="active"><a id="navHome" href="${homeUrl}">Home</a></li>
-              <li>
-                  <!-- tag::link[]
-                  -->
-                <c:url value="/link.jsp" var="linkUrl"/>
-                <a id="navLink" href="${linkUrl}">Link</a>
-              <!-- end::link[]
-                              -->
-              </li>
+              <li><a id="navHome" href="${homeUrl}">Home</a></li>
+              <c:url value="/link.jsp" var="linkUrl"/>
+              <li class="active"><a id="navLink" href="${linkUrl}">Link</a></li>
+
             </ul>
             <c:if test="${currentAccount != null or not empty accounts}">
                 <ul class="nav navbar-nav navbar-right">
@@ -46,10 +41,7 @@
                           <li class="divider"></li>
                       </c:if>
                       <c:forEach items="${accounts}" var="account">
-                          <c:set var="encodedUsername">
-                            <c:out value="${account.username}"/>
-                          </c:set>
-                          <li><a id="switchAccount${encodedUsername}" href="${account.switchAccountUrl}"><c:out value="${account.username}"/></a></li>
+                          <li><a id="switchAccount${account.username}" href="${account.switchAccountUrl}"><c:out value="${account.username}"/></a></li>
                       </c:forEach>
                     </ul>
                   </li>
@@ -60,31 +52,12 @@
       </nav>
 
         <h1>Description</h1>
-        <p>This application demonstrates how to use Spring Session to authenticate as multiple users at a time. View authenticated users in the upper right corner.</p>
+        <p>This page demonstrates how we keep track of the correct user session between links even when multiple tabs are open. Try opening another tab with a different user and browse. Then come back to the original tab and see the correct user is maintained.</p>
 
         <c:choose>
             <c:when test="${username == null}">
                 <h1>Please Log In</h1>
-                <p>You are not currently authenticated with this session. You can authenticate with any username password combination that are equal. A few examples to try:</p>
-                <ul>
-                    <li><b>Username</b> rob and <b>Password</b> rob</li>
-                    <li><b>Username</b> luke and <b>Password</b> luke</li>
-                </ul>
-                <c:if test="${param.error != null}">
-                    <div id="error" class="alert alert-danger">Invalid username / password. Please ensure the username is the same as the password.</div>
-                </c:if>
-                <c:url value="/login" var="loginUrl"/>
-                <form action="${loginUrl}" method="post">
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input id="username" type="text" name="username"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input id="password" type="password" name="password"/>
-                    </div>
-                    <input type="submit" value="Login"/>
-                </form>
+                <p>You are not currently authenticated with this session. <a href="${homeUrl}">Log In</a></p>
             </c:when>
             <c:otherwise>
                 <h1 id="un"><c:out value="${username}"/></h1>

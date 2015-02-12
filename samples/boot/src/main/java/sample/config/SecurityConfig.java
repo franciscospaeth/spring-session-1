@@ -24,7 +24,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
  * @author Rob Winch
  */
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {

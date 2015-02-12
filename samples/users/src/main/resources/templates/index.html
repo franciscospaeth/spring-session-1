@@ -1,0 +1,47 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-3.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Demonstrates Multi User Log In</title>
+    <link rel="stylesheet" href="./assets/bootstrap.min.css"></link>
+    <style type="text/css">
+        body {
+            padding: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+      <!-- Static navbar -->
+      <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="https://github.com/spring-projects/spring-session/">Spring Session</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+
+              <li class="active"><a id="navHome" th:href="@{/}">Home</a></li>
+              <li>
+                <a id="navLink" th:href="@{/link}">Link</a>
+              </li>
+            </ul>
+              <!-- if -->
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+      </nav>
+
+        <h1>Description</h1>
+        <p>This application demonstrates how to use Spring Session to authenticate as multiple users at a time. View authenticated users in the upper right corner.</p>
+
+        <!-- choose -->
+    </div>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="./assets/jquery.min.js"></script>
+    <script src="./assets/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="./assets/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>
