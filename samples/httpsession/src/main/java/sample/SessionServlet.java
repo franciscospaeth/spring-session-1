@@ -26,9 +26,14 @@ public class SessionServlet extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession session = req.getSession();
+		String id = req.changeSessionId();
+
+		// The id didn't change!
+
 		String attributeName = req.getParameter("attributeName");
 		String attributeValue = req.getParameter("attributeValue");
-		req.getSession().setAttribute(attributeName, attributeValue);
+		session.setAttribute(attributeName, attributeValue);
 		resp.sendRedirect(req.getContextPath() + "/");
 	}
 
