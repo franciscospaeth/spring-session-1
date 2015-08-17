@@ -15,8 +15,6 @@
  */
 package org.springframework.session.context;
 
-import org.springframework.util.Assert;
-
 final class GlobalSessionContextHolderStrategy implements SessionContextHolderStrategy {
 
 	private static SessionContext contextHolder;
@@ -34,7 +32,9 @@ final class GlobalSessionContextHolderStrategy implements SessionContextHolderSt
 	}
 
 	public void setContext(SessionContext context) {
-		Assert.notNull(context, "context must not be null");
+		if(context == null) {
+			throw new IllegalArgumentException("context must not be null");
+		}
 		contextHolder = context;
 	}
 

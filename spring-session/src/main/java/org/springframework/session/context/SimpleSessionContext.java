@@ -16,14 +16,13 @@
 package org.springframework.session.context;
 
 import org.springframework.session.Session;
-import org.springframework.util.ObjectUtils;
 
 /**
  * Simple implementation for {@link SessionContext}.
- * 
+ *
  * @author Francisco Spaeth
  * @since 1.1
- * 
+ *
  */
 public class SimpleSessionContext implements SessionContext {
 
@@ -39,22 +38,27 @@ public class SimpleSessionContext implements SessionContext {
 
 	@Override
 	public int hashCode() {
-		return ObjectUtils.nullSafeHashCode(session);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((session == null) ? 0 : session.hashCode());
+		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (getClass() != obj.getClass()) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
 		SimpleSessionContext other = (SimpleSessionContext) obj;
-		return ObjectUtils.nullSafeEquals(session, other.session);
+		if (session == null) {
+			if (other.session != null)
+				return false;
+		} else if (!session.equals(other.session))
+			return false;
+		return true;
 	}
 
 	@Override

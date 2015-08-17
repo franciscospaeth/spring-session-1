@@ -18,9 +18,6 @@ package org.springframework.session.context;
 import java.lang.reflect.Constructor;
 
 import org.springframework.session.Session;
-import org.springframework.util.Assert;
-import org.springframework.util.ReflectionUtils;
-import org.springframework.util.StringUtils;
 
 /**
  * Associates a given {@link SessionContext} with the current execution using configured strategy.
@@ -40,7 +37,7 @@ import org.springframework.util.StringUtils;
  *
  * @author Francisco Spaeth
  * @since 1.1
- * 
+ *
  */
 public class SessionContextHolder {
 
@@ -65,7 +62,7 @@ public class SessionContextHolder {
 
 	/**
 	 * Obtain the current <code>Session</code>.
-	 * 
+	 *
 	 * @return the security context, <code>null</code> when no session available
 	 */
 	public static Session getSession() {
@@ -80,7 +77,7 @@ public class SessionContextHolder {
 
 	/**
 	 * Primarily for troubleshooting purposes, this method shows how many times the class has re-initialized its {@link SessionContextHolderStrategy}.
-	 * 
+	 *
 	 * @return the count (should be one unless you've called {@link #setStrategyName(String)} to switch to an alternate strategy).
 	 */
 	public static int getInitializeCount() {
@@ -88,7 +85,7 @@ public class SessionContextHolder {
 	}
 
 	private static void initialize() {
-		if (StringUtils.isEmpty(strategyName)) {
+		if (strategyName == null || "".equals(strategyName.trim())) {
 			strategyName = MODE_THREADLOCAL;
 		}
 
@@ -111,27 +108,20 @@ public class SessionContextHolder {
 			Constructor<?> customStrategy = clazz.getConstructor();
 			strategy = (SessionContextHolderStrategy) customStrategy.newInstance();
 		} catch (Exception ex) {
-			ReflectionUtils.handleReflectionException(ex);
+			throw new RuntimeException(ex);
 		}
 	}
 
 	/**
 	 * Associates a new {@link SessionContext} with the current execution using configured strategy.
-	 * 
+	 *
 	 * @param sessionContext the new {@link SessionContext} (may not be <code>null</code>)
 	 */
 	public static void setContext(SessionContext sessionContext) {
-		Assert.notNull(sessionContext, "context must not be null");
+		if(sessionContext == null) {
+			throw new IllegalArgumentException("context must not be null");
+		}
 		strategy.setContext(sessionContext);
-	}
-
-	/**
-	 * Retrieves the current {@link SessionContext}.
-	 * 
-	 * @return the {@link SessionContext} (never <code>null</code>).
-	 */
-	public static SessionContext getContext() {
-		return strategy.getContext();
 	}
 
 	/**

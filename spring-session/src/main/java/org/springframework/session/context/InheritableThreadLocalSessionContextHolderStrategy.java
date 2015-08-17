@@ -15,8 +15,6 @@
  */
 package org.springframework.session.context;
 
-import org.springframework.util.Assert;
-
 final class InheritableThreadLocalSessionContextHolderStrategy implements SessionContextHolderStrategy {
 
 	private static final ThreadLocal<SessionContext> contextHolder = new InheritableThreadLocal<SessionContext>();
@@ -37,7 +35,9 @@ final class InheritableThreadLocalSessionContextHolderStrategy implements Sessio
 	}
 
 	public void setContext(SessionContext context) {
-		Assert.notNull(context, "context must not be null");
+		if(context == null) {
+			throw new IllegalArgumentException("context must not be null");
+		}
 		contextHolder.set(context);
 	}
 
