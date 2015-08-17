@@ -24,7 +24,7 @@ public class GlobalSessionContextHolderStrategyTests {
 
 	@Test
 	public void testSetterGetterAndClear() {
-		SimpleSessionContext context = new SimpleSessionContext();
+		SessionContextBean context = new SessionContextBean();
 		strategy.setContext(context);
 		SessionContext retrieved = strategy.getContext();
 		strategy.clearContext();

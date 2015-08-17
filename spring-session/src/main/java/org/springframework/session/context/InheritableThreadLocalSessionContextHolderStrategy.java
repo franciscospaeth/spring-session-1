@@ -42,7 +42,7 @@ final class InheritableThreadLocalSessionContextHolderStrategy implements Sessio
 	}
 
 	public SessionContext createEmptyContext() {
-		return new SimpleSessionContext();
+		return new SessionContextBean();
 	}
 
 }

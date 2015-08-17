@@ -28,7 +28,7 @@ public class InheritableThreadLocalSessionContextHolderStrategyTest {
 
 	@Test
 	public void testSetterGetterAndClear() {
-		SimpleSessionContext context = new SimpleSessionContext();
+		SessionContextBean context = new SessionContextBean();
 		strategy.setContext(context);
 		SessionContext retrieved = strategy.getContext();
 		strategy.clearContext();
@@ -50,7 +50,7 @@ public class InheritableThreadLocalSessionContextHolderStrategyTest {
 	@Test
 	public void testInheritedThreadsContextHolder() throws Exception {
 		final AtomicBoolean failed = new AtomicBoolean(true);
-		final SimpleSessionContext context = new SimpleSessionContext();
+		final SessionContextBean context = new SessionContextBean();
 		context.setSession(Mockito.mock(Session.class));
 
 		strategy.setContext(context);

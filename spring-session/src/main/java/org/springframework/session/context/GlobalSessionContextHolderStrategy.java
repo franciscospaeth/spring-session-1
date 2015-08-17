@@ -39,7 +39,7 @@ final class GlobalSessionContextHolderStrategy implements SessionContextHolderSt
 	}
 
 	public SessionContext createEmptyContext() {
-		return new SimpleSessionContext();
+		return new SessionContextBean();
 	}
 
 }

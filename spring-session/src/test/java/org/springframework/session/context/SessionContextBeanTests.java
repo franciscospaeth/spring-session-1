@@ -21,19 +21,19 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.session.Session;
 
-public class SimpleSessionContextImplTests {
+public class SessionContextBeanTests {
 
 	@Test
 	public void testEquals() {
-		SimpleSessionContext obj1 = new SimpleSessionContext();
-		SimpleSessionContext obj2 = new SimpleSessionContext();
+		SessionContextBean obj1 = new SessionContextBean();
+		SessionContextBean obj2 = new SessionContextBean();
 
 		assertTrue(obj1.equals(obj2));
 	}
 
 	@Test
 	public void testSimpleSetGetOperation() {
-		SimpleSessionContext context = new SimpleSessionContext();
+		SessionContextBean context = new SessionContextBean();
 		Session session = Mockito.mock(Session.class);
 
 		context.setSession(session);

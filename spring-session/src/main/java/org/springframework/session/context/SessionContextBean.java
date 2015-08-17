@@ -24,7 +24,7 @@ import org.springframework.session.Session;
  * @since 1.1
  *
  */
-public class SimpleSessionContext implements SessionContext {
+public class SessionContextBean implements SessionContext {
 
 	private Session session;
 
@@ -52,7 +52,7 @@ public class SimpleSessionContext implements SessionContext {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SimpleSessionContext other = (SimpleSessionContext) obj;
+		SessionContextBean other = (SessionContextBean) obj;
 		if (session == null) {
 			if (other.session != null)
 				return false;

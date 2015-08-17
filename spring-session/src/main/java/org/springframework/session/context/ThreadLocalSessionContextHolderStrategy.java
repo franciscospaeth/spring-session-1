@@ -43,7 +43,7 @@ final class ThreadLocalSessionContextHolderStrategy implements SessionContextHol
 	}
 
 	public SessionContext createEmptyContext() {
-		return new SimpleSessionContext();
+		return new SessionContextBean();
 	}
 
 }
