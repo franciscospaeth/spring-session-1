@@ -17,12 +17,14 @@ package org.springframework.session.context;
 
 /**
  * A strategy for storing session context information.
+ *
  * <p>
- * The strategy instance is mainly used by {@link SecurityContextHolder}.
+ * The strategy instance is mainly used by {@link SessionContextHolder}.
+ * </p>
  *
  * @author Francisco Spaeth
  * @since 1.1
- * 
+ *
  */
 public interface SessionContextHolderStrategy {
 
@@ -43,7 +45,7 @@ public interface SessionContextHolderStrategy {
 	 * Sets the current context.
 	 *
 	 * @param context to the new argument
-	 * 
+	 *
 	 * @throws IllegalArgumentException when context is null
 	 */
 	void setContext(SessionContext context);
