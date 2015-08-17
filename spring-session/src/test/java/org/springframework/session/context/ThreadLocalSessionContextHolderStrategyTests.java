@@ -22,7 +22,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.session.Session;
 
-public class ThreadLocalSessionContextHolderStrategyTest {
+public class ThreadLocalSessionContextHolderStrategyTests {
 
 	private SessionContextHolderStrategy strategy = new ThreadLocalSessionContextHolderStrategy();
 

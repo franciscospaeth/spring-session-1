@@ -20,7 +20,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-public class SessionContextHolderTest {
+public class SessionContextHolderTests {
 
 	@BeforeClass
 	public static void beforeClass() {

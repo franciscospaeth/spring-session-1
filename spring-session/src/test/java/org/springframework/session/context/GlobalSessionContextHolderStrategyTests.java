@@ -18,7 +18,7 @@ package org.springframework.session.context;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class GlobalSessionContextHolderStrategyTest {
+public class GlobalSessionContextHolderStrategyTests {
 
 	private SessionContextHolderStrategy strategy = new GlobalSessionContextHolderStrategy();
 
