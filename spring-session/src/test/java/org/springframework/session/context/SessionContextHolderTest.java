@@ -15,6 +15,7 @@
  */
 package org.springframework.session.context;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -24,6 +25,11 @@ public class SessionContextHolderTest {
 	@BeforeClass
 	public static void beforeClass() {
 		SessionContextHolder.setStrategyName(MySessionContextHolderStrategy.class.getName());
+	}
+
+	@AfterClass
+	public static void afterClass() {
+		SessionContextHolder.setStrategyName(SessionContextHolder.MODE_THREADLOCAL);
 	}
 
 	@Test

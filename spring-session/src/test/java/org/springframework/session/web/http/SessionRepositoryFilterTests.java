@@ -44,8 +44,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionContext;
 
+import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -81,17 +81,17 @@ public class SessionRepositoryFilterTests {
 
 	private MockFilterChain chain;
 
-	@BeforeClass
-	public static void beforeClass() {
-		SessionContextHolder.setStrategyName(SessionContextHolder.MODE_GLOBAL);
-	}
-
 	@Before
 	public void setup() throws Exception {
 		sessions = new HashMap<String, ExpiringSession>();
 		sessionRepository = new MapSessionRepository(sessions);
 		filter = new SessionRepositoryFilter<ExpiringSession>(sessionRepository);
 		setupRequest();
+	}
+
+	@After
+	public void cleanup() {
+		SessionContextHolder.clearContext();
 	}
 
 	@Test
