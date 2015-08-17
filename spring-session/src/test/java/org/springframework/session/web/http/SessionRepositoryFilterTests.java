@@ -413,7 +413,9 @@ public class SessionRepositoryFilterTests {
 		doFilter(new DoInFilter() {
 			@Override
 			public void doFilter(HttpServletRequest wrappedRequest) {
-				assertThat(SessionContextHolder.getSession()).isNotNull();
+				assertThat(SessionContextHolder.getSession()).isNull();
+				HttpSession session = wrappedRequest.getSession();
+				assertThat(SessionContextHolder.getSession().getId()).isEqualTo(session.getId());
 			}
 		});
 		assertThat(SessionContextHolder.getSession()).isNull();
