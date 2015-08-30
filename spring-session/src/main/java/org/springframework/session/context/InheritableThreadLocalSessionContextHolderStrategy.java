@@ -15,12 +15,16 @@
  */
 package org.springframework.session.context;
 
+import org.springframework.session.Session;
+
 final class InheritableThreadLocalSessionContextHolderStrategy implements SessionContextHolderStrategy {
 
 	private static final ThreadLocal<SessionContext> contextHolder = new InheritableThreadLocal<SessionContext>();
+	private static final ThreadLocal<Session> sessionHolder = new InheritableThreadLocal<Session>();
 
 	public void clearContext() {
 		contextHolder.remove();
+		sessionHolder.remove();
 	}
 
 	public SessionContext getContext() {
@@ -43,6 +47,14 @@ final class InheritableThreadLocalSessionContextHolderStrategy implements Sessio
 
 	public SessionContext createEmptyContext() {
 		return new SessionContextBean();
+	}
+
+	public Session getSession() {
+		return sessionHolder.get();
+	}
+	
+	public void setSession(Session session) {
+		sessionHolder.set(session);
 	}
 
 }

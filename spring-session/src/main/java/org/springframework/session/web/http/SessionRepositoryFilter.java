@@ -142,6 +142,11 @@ public class SessionRepositoryFilter<S extends ExpiringSession> extends OncePerR
 		public S getSession() {
 			return request.getSpringSession();
 		}
+		
+		@SuppressWarnings("unchecked")
+		public void setSession(Session session) {
+			request.getSession().setSession((S) session);
+		}
 
 	}
 
@@ -218,6 +223,13 @@ public class SessionRepositoryFilter<S extends ExpiringSession> extends OncePerR
 		private S getSpringSession() {
 			HttpSessionWrapper wrapper = getCurrentSession();
 			return wrapper == null ? null : wrapper.getSession();
+		}
+		
+		private void setSpringSession(S session) {
+			HttpSessionWrapper wrapper = getCurrentSession();
+			if (wrapper != null) {
+				
+			}
 		}
 
 		private void setCurrentSession(HttpSessionWrapper currentSession) {

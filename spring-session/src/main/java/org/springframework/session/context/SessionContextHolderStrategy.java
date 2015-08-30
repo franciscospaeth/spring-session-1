@@ -15,6 +15,8 @@
  */
 package org.springframework.session.context;
 
+import org.springframework.session.Session;
+
 /**
  * A strategy for storing session context information.
  *
@@ -39,6 +41,7 @@ public interface SessionContextHolderStrategy {
 	 * @return a context (never <code>null</code> - create a default implementation if
 	 * necessary)
 	 */
+	@Deprecated
 	SessionContext getContext();
 
 	/**
@@ -48,6 +51,7 @@ public interface SessionContextHolderStrategy {
 	 *
 	 * @throws IllegalArgumentException when context is null
 	 */
+	@Deprecated
 	void setContext(SessionContext context);
 
 	/**
@@ -55,6 +59,11 @@ public interface SessionContextHolderStrategy {
 	 *
 	 * @return a default SessionContext instance.
 	 */
+	@Deprecated
 	SessionContext createEmptyContext();
+	
+	void setSession(Session session);
+	
+	Session getSession();
 
 }

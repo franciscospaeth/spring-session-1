@@ -19,6 +19,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springframework.session.Session;
 
 public class SessionContextHolderTests {
 
@@ -64,18 +65,29 @@ public class SessionContextHolderTests {
 			delegate.clearContext();
 		}
 
+		@Deprecated
 		public SessionContext getContext() {
 			return delegate.getContext();
 		}
 
+		@Deprecated
 		public void setContext(SessionContext context) {
 			delegate.setContext(context);
 		}
 
+		@Deprecated
 		public SessionContext createEmptyContext() {
 			return delegate.createEmptyContext();
 		}
 
+		public void setSession(Session session) {
+			delegate.setSession(session);
+		}
+		
+		public Session getSession() {
+			return delegate.getSession();
+		}
+	
 	}
 
 }

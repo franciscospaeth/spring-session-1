@@ -32,5 +32,7 @@ public interface SessionContext {
 	 * @return current session, <code>null</code> when no session bounded to the current execution thread.
 	 */
 	Session getSession();
+	
+	void setSession(Session session);
 
 }

@@ -15,9 +15,12 @@
  */
 package org.springframework.session.context;
 
+import org.springframework.session.Session;
+
 final class GlobalSessionContextHolderStrategy implements SessionContextHolderStrategy {
 
 	private static SessionContext contextHolder;
+	private static Session session;
 
 	public void clearContext() {
 		contextHolder = null;
@@ -40,6 +43,15 @@ final class GlobalSessionContextHolderStrategy implements SessionContextHolderSt
 
 	public SessionContext createEmptyContext() {
 		return new SessionContextBean();
+	}
+	
+	public Session getSession() {
+		return session;
+	}
+	
+	@SuppressWarnings("static-access")
+	public void setSession(Session session) {
+		this.session = session;
 	}
 
 }

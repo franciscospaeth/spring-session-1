@@ -15,15 +15,19 @@
  */
 package org.springframework.session.context;
 
+import org.springframework.session.Session;
+
 final class ThreadLocalSessionContextHolderStrategy implements SessionContextHolderStrategy {
 
 	private static final ThreadLocal<SessionContext> contextHolder = new ThreadLocal<SessionContext>();
+	private static final ThreadLocal<Session> sessionHolder = new ThreadLocal<Session>();
 
 	public void clearContext() {
 		contextHolder.remove();
-
+		sessionHolder.remove();
 	}
 
+	@Deprecated
 	public SessionContext getContext() {
 		SessionContext ctx = contextHolder.get();
 
@@ -35,6 +39,7 @@ final class ThreadLocalSessionContextHolderStrategy implements SessionContextHol
 		return ctx;
 	}
 
+	@Deprecated
 	public void setContext(SessionContext context) {
 		if(context == null) {
 			throw new IllegalArgumentException("context must not be null");
@@ -42,8 +47,17 @@ final class ThreadLocalSessionContextHolderStrategy implements SessionContextHol
 		contextHolder.set(context);
 	}
 
+	@Deprecated
 	public SessionContext createEmptyContext() {
 		return new SessionContextBean();
+	}
+	
+	public Session getSession() {
+		return sessionHolder.get();
+	}
+	
+	public void setSession(Session session) {
+		sessionHolder.set(session);
 	}
 
 }

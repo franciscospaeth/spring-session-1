@@ -25,6 +25,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionContext;
 
 import org.springframework.session.ExpiringSession;
+import org.springframework.session.context.SessionContextHolder;
 
 /**
  * Adapts Spring Session's {@link ExpiringSession} to an {@link HttpSession}.
