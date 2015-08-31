@@ -28,31 +28,29 @@ public class ThreadLocalSessionContextHolderStrategyTests {
 
 	@Test
 	public void testSetterGetterAndClear() {
-		SessionContextBean context = new SessionContextBean();
+		SessionContext context = Mockito.mock(SessionContext.class);
+		Session session = Mockito.mock(Session.class);
+
 		strategy.setContext(context);
-		SessionContext retrieved = strategy.getContext();
-		strategy.clearContext();
-		SessionContext retrievedAfterClear = strategy.getContext();
+		strategy.setSession(session);
+		SessionContext retrievedContext = strategy.getContext();
+		Session retrievedSession = strategy.getSession();
 
-		Assert.assertEquals(retrieved, context);
-		Assert.assertNotNull(retrievedAfterClear);
-		Assert.assertNotSame(retrieved, retrievedAfterClear);
-	}
+		strategy.clear();
+		SessionContext retrievedContextAfterClear = strategy.getContext();
+		Session retrievedSessionAfterClear = strategy.getSession();
 
-	@Test
-	public void testCreateEmptyContext() {
-		SessionContext context1 = strategy.createEmptyContext();
-		SessionContext context2 = strategy.createEmptyContext();
-
-		Assert.assertNotSame(context1, context2);
+		Assert.assertEquals(retrievedContext, context);
+		Assert.assertEquals(retrievedSession, session);
+		Assert.assertNull(retrievedContextAfterClear);
+		Assert.assertNull(retrievedSessionAfterClear);
 	}
 
 	@Test
 	public void testInheritedThreadsContextHolder() throws Exception {
 		final AtomicBoolean failed = new AtomicBoolean(true);
-		final SessionContextBean context = new SessionContextBean();
-		context.setSession(Mockito.mock(Session.class));
 
+		final SessionContext context = Mockito.mock(SessionContext.class);
 		strategy.setContext(context);
 
 		Thread thread = new Thread(new Runnable() {
@@ -65,6 +63,15 @@ public class ThreadLocalSessionContextHolderStrategyTests {
 		thread.start();
 		thread.join();
 		Assert.assertFalse("inheritable thread strategy seems to be applied", failed.get());
+	}
+
+	@Test
+	public void testContextSetup() {
+		SessionContext context = Mockito.mock(SessionContext.class);
+		strategy.setContext(context);
+		strategy.getSession();
+
+		Mockito.verify(context).setup();
 	}
 
 }

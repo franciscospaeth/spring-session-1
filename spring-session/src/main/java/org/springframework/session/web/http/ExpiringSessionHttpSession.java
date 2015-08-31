@@ -41,16 +41,21 @@ class ExpiringSessionHttpSession<S extends ExpiringSession> implements HttpSessi
 	private boolean old;
 
 	public ExpiringSessionHttpSession(S session, ServletContext servletContext) {
-		this.session = session;
+		this.setSession(session);
 		this.servletContext = servletContext;
 	}
 
 	public void setSession(S session) {
 		this.session = session;
+		SessionContextHolder.setSession(this.session);
 	}
 
 	public S getSession() {
-		return session;
+		S session = (S) SessionContextHolder.getSession();
+		if (session == null) {
+			SessionContextHolder.setSession(this.session);
+		}
+		return this.session;
 	}
 
 	public long getCreationTime() {

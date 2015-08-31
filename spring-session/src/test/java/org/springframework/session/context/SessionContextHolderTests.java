@@ -45,7 +45,7 @@ public class SessionContextHolderTests {
 	public void testContextHolderClearContextDelegatedToStrategy() {
 		SessionContextHolder.clearContext();
 
-		Mockito.verify(MySessionContextHolderStrategy.delegate).clearContext();
+		Mockito.verify(MySessionContextHolderStrategy.delegate).clear();
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -61,23 +61,16 @@ public class SessionContextHolderTests {
 			delegate = Mockito.mock(SessionContextHolderStrategy.class);
 		}
 
-		public void clearContext() {
-			delegate.clearContext();
+		public void clear() {
+			delegate.clear();
 		}
 
-		@Deprecated
 		public SessionContext getContext() {
 			return delegate.getContext();
 		}
 
-		@Deprecated
 		public void setContext(SessionContext context) {
 			delegate.setContext(context);
-		}
-
-		@Deprecated
-		public SessionContext createEmptyContext() {
-			return delegate.createEmptyContext();
 		}
 
 		public void setSession(Session session) {

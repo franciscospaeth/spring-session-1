@@ -19,45 +19,35 @@ import org.springframework.session.Session;
 
 final class ThreadLocalSessionContextHolderStrategy implements SessionContextHolderStrategy {
 
-	private static final ThreadLocal<SessionContext> contextHolder = new ThreadLocal<SessionContext>();
-	private static final ThreadLocal<Session> sessionHolder = new ThreadLocal<Session>();
+	private static final ThreadLocal<SessionContextTuple> contextHolder = new ThreadLocal<SessionContextTuple>();
 
-	public void clearContext() {
+	public void clear() {
 		contextHolder.remove();
-		sessionHolder.remove();
 	}
 
-	@Deprecated
 	public SessionContext getContext() {
-		SessionContext ctx = contextHolder.get();
-
-		if (ctx == null) {
-			ctx = createEmptyContext();
-			contextHolder.set(ctx);
-		}
-
-		return ctx;
+		return getTuple().getContext();
 	}
 
-	@Deprecated
 	public void setContext(SessionContext context) {
-		if(context == null) {
-			throw new IllegalArgumentException("context must not be null");
-		}
-		contextHolder.set(context);
+		getTuple().setContext(context);
 	}
 
-	@Deprecated
-	public SessionContext createEmptyContext() {
-		return new SessionContextBean();
-	}
-	
 	public Session getSession() {
-		return sessionHolder.get();
+		return getTuple().getSession();
 	}
-	
+
 	public void setSession(Session session) {
-		sessionHolder.set(session);
+		getTuple().setSession(session);
+	}
+
+	private SessionContextTuple getTuple() {
+		SessionContextTuple tuple = contextHolder.get();
+		if (tuple == null) {
+			tuple = new SessionContextTuple();
+			contextHolder.set(tuple);
+		}
+		return tuple;
 	}
 
 }

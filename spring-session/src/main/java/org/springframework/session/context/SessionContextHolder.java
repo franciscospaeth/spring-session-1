@@ -20,7 +20,7 @@ import java.lang.reflect.Constructor;
 import org.springframework.session.Session;
 
 /**
- * Associates a given {@link SessionContext} with the current execution using configured strategy.
+ * Associates a given {@link Session} and {@link SessionContext} with the current execution using configured strategy.
  * <p>
  * This class provides a series of static methods that delegate to an instance of {@link SessionContextHolderStrategy}. The purpose of the class is to provide a
  * convenient way to specify the strategy that should be used for a given JVM. This is a JVM-wide setting, since everything in this class is <code>static</code>
@@ -57,7 +57,7 @@ public class SessionContextHolder {
 	 * Explicitly clears the context value.
 	 */
 	public static void clearContext() {
-		strategy.clearContext();
+		strategy.clear();
 	}
 
 	/**
@@ -66,13 +66,7 @@ public class SessionContextHolder {
 	 * @return the security context, <code>null</code> when no session available
 	 */
 	public static Session getSession() {
-		SessionContext ctx = strategy.getContext();
-
-		if (ctx == null) {
-			return null;
-		}
-
-		return ctx.getSession();
+		return strategy.getSession();
 	}
 
 	/**
@@ -147,6 +141,10 @@ public class SessionContextHolder {
 	@Override
 	public String toString() {
 		return "SessionContextHolder[strategy='" + strategyName + "'; initializeCount=" + initializeCount + "]";
+	}
+
+	public static void setSession(Session session) {
+		strategy.setSession(session);
 	}
 
 }

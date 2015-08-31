@@ -17,44 +17,38 @@ package org.springframework.session.context;
 
 import org.springframework.session.Session;
 
-final class InheritableThreadLocalSessionContextHolderStrategy implements SessionContextHolderStrategy {
+final class InheritableThreadLocalSessionContextHolderStrategy
+		implements SessionContextHolderStrategy {
 
-	private static final ThreadLocal<SessionContext> contextHolder = new InheritableThreadLocal<SessionContext>();
-	private static final ThreadLocal<Session> sessionHolder = new InheritableThreadLocal<Session>();
+	private static final ThreadLocal<SessionContextTuple> contextHolder = new InheritableThreadLocal<SessionContextTuple>();
 
-	public void clearContext() {
+	public void clear() {
 		contextHolder.remove();
-		sessionHolder.remove();
 	}
 
 	public SessionContext getContext() {
-		SessionContext ctx = contextHolder.get();
-
-		if (ctx == null) {
-			ctx = createEmptyContext();
-			contextHolder.set(ctx);
-		}
-
-		return ctx;
+		return getTuple().getContext();
 	}
 
 	public void setContext(SessionContext context) {
-		if(context == null) {
-			throw new IllegalArgumentException("context must not be null");
-		}
-		contextHolder.set(context);
-	}
-
-	public SessionContext createEmptyContext() {
-		return new SessionContextBean();
+		getTuple().setContext(context);
 	}
 
 	public Session getSession() {
-		return sessionHolder.get();
+		return getTuple().getSession();
 	}
-	
+
 	public void setSession(Session session) {
-		sessionHolder.set(session);
+		getTuple().setSession(session);
+	}
+
+	private SessionContextTuple getTuple() {
+		SessionContextTuple tuple = contextHolder.get();
+		if (tuple == null) {
+			tuple = new SessionContextTuple();
+			contextHolder.set(tuple);
+		}
+		return tuple;
 	}
 
 }

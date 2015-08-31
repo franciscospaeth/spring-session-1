@@ -18,7 +18,8 @@ package org.springframework.session.context;
 import org.springframework.session.Session;
 
 /**
- * A {@link Session} context, used to retrieve the session from its provider.
+ * A {@link Session} context, used to specify instructions necessary to setup
+ * the session from its context.
  * 
  * @author Francisco Spaeth
  * @since 1.1
@@ -27,12 +28,8 @@ import org.springframework.session.Session;
 public interface SessionContext {
 
 	/**
-	 * Obtain the current session.
-	 * 
-	 * @return current session, <code>null</code> when no session bounded to the current execution thread.
+	 * Configures the session from its context. In a web context, it will typically trigger the creation of an {@link javax.servlet.http.HttpSession}.
 	 */
-	Session getSession();
-	
-	void setSession(Session session);
+	void setup();
 
 }

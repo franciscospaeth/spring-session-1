@@ -17,6 +17,8 @@ package org.springframework.session.context;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
+import org.springframework.session.Session;
 
 public class GlobalSessionContextHolderStrategyTests {
 
@@ -24,23 +26,31 @@ public class GlobalSessionContextHolderStrategyTests {
 
 	@Test
 	public void testSetterGetterAndClear() {
-		SessionContextBean context = new SessionContextBean();
+		SessionContext context = Mockito.mock(SessionContext.class);
+		Session session = Mockito.mock(Session.class);
+
 		strategy.setContext(context);
-		SessionContext retrieved = strategy.getContext();
-		strategy.clearContext();
-		SessionContext retrievedAfterClear = strategy.getContext();
+		strategy.setSession(session);
+		SessionContext retrievedContext = strategy.getContext();
+		Session retrievedSession = strategy.getSession();
 
-		Assert.assertEquals(retrieved, context);
-		Assert.assertNotNull(retrievedAfterClear);
-		Assert.assertNotSame(retrieved, retrievedAfterClear);
+		strategy.clear();
+		SessionContext retrievedContextAfterClear = strategy.getContext();
+		Session retrievedSessionAfterClear = strategy.getSession();
+		
+		Assert.assertEquals(retrievedContext, context);
+		Assert.assertEquals(retrievedSession, session);
+		Assert.assertNull(retrievedContextAfterClear);
+		Assert.assertNull(retrievedSessionAfterClear);
 	}
-
+	
 	@Test
-	public void testCreateEmptyContext() {
-		SessionContext context1 = strategy.createEmptyContext();
-		SessionContext context2 = strategy.createEmptyContext();
+	public void testContextSetup() {
+		SessionContext context = Mockito.mock(SessionContext.class);
+		strategy.setContext(context);
+		strategy.getSession();
 
-		Assert.assertNotSame(context1, context2);
+		Mockito.verify(context).setup();
 	}
 
 }

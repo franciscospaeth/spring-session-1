@@ -19,39 +19,27 @@ import org.springframework.session.Session;
 
 final class GlobalSessionContextHolderStrategy implements SessionContextHolderStrategy {
 
-	private static SessionContext contextHolder;
-	private static Session session;
+	private final static SessionContextTuple contextTuple = new SessionContextTuple();
 
-	public void clearContext() {
-		contextHolder = null;
+	public void clear() {
+		contextTuple.clear();
 	}
 
 	public SessionContext getContext() {
-		if (contextHolder == null) {
-			contextHolder = createEmptyContext();
-		}
-
-		return contextHolder;
+		return contextTuple.getContext();
 	}
 
 	public void setContext(SessionContext context) {
-		if(context == null) {
-			throw new IllegalArgumentException("context must not be null");
-		}
-		contextHolder = context;
+		contextTuple.setContext(context);
 	}
 
-	public SessionContext createEmptyContext() {
-		return new SessionContextBean();
-	}
-	
 	public Session getSession() {
-		return session;
+		return contextTuple.getSession();
 	}
-	
+
 	@SuppressWarnings("static-access")
 	public void setSession(Session session) {
-		this.session = session;
+		this.contextTuple.setSession(session);
 	}
 
 }

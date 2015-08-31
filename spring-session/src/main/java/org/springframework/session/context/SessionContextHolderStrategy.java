@@ -18,7 +18,7 @@ package org.springframework.session.context;
 import org.springframework.session.Session;
 
 /**
- * A strategy for storing session context information.
+ * A strategy for storing {@link Session} and {@link SessionContext} information.
  *
  * <p>
  * The strategy instance is mainly used by {@link SessionContextHolder}.
@@ -31,39 +31,37 @@ import org.springframework.session.Session;
 public interface SessionContextHolderStrategy {
 
 	/**
-	 * Clears the current context.
+	 * Clears the current session and context.
 	 */
-	void clearContext();
+	void clear();
 
 	/**
-	 * Obtains the current context.
+	 * Obtains the current session context.
 	 *
 	 * @return a context (never <code>null</code> - create a default implementation if
 	 * necessary)
 	 */
-	@Deprecated
 	SessionContext getContext();
 
 	/**
-	 * Sets the current context.
+	 * Sets the current session context.
 	 *
 	 * @param context to the new argument
-	 *
-	 * @throws IllegalArgumentException when context is null
 	 */
-	@Deprecated
 	void setContext(SessionContext context);
-
-	/**
-	 * Creates a default {@link SessionContext}.
-	 *
-	 * @return a default SessionContext instance.
-	 */
-	@Deprecated
-	SessionContext createEmptyContext();
 	
+	/**
+	 * Sets the current session.
+	 * 
+	 * @param session
+	 */
 	void setSession(Session session);
 	
+	/**
+	 * Obtains the current session.
+	 * 
+	 * @return
+	 */
 	Session getSession();
 
 }
